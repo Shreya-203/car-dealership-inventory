@@ -1,0 +1,16 @@
+{
+"name": "car-dealership-backend",
+"version": "1.0.0",
+"description": "Car Dealership Inventory System API",
+"main": "src/server.js",
+"scripts": {
+"start": "node src/server.js",
+"dev": "nodemon src/server.js",
+"test": "jest --runInBand",
+"test:coverage": "jest --coverage --runInBand"
+},
+"jest": {
+"testEnvironment": "node",
+"clearMocks": true
+}
+}
