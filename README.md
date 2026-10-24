@@ -235,3 +235,26 @@ See `PROMPTS.md` for the prompts and AI interaction records required for this as
 * Purchase history and transaction records.
 * More comprehensive automated testing.
 * Improved deployment configuration.
+
+
+## Application Screenshots
+
+### Login Page
+
+![AutoHub Login](screenshots/login.png)
+
+### Vehicle Inventory
+
+![Vehicle Inventory](screenshots/inventory.png)
+
+### Search and Filter
+
+![Vehicle Search](screenshots/search.png)
+
+### Admin Dashboard
+
+![Admin Dashboard](screenshots/admin.png)
+
+### Backend Test Results
+
+![Backend Tests](screenshots/tests.png)

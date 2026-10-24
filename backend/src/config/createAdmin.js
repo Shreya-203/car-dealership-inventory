@@ -1,8 +1,6 @@
 require("dotenv").config();
-
 const db = require("./database");
 const bcrypt = require("bcryptjs");
-const readline = require("readline");
 
 async function createAdmin() {
   const email = process.env.ADMIN_EMAIL;
@@ -21,14 +19,19 @@ async function createAdmin() {
 
   const normalizedEmail = email.trim().toLowerCase();
 
-  const existing = db.prepare(
-    "SELECT id, role FROM users WHERE email = ?"
-  ).get(normalizedEmail);
+  const existing = db
+    .prepare("SELECT id, role FROM users WHERE email = ?")
+    .get(normalizedEmail);
 
   if (existing) {
-    console.log(
-      `Account already exists with role: ${existing.role}. No changes made.`
-    );
+    if (existing.role === "admin") {
+      console.log("This account is already an admin.");
+    } else {
+      db.prepare("UPDATE users SET role = 'admin' WHERE id = ?")
+        .run(existing.id);
+
+      console.log("Existing account promoted to admin successfully.");
+    }
     return;
   }
 
@@ -43,8 +46,9 @@ async function createAdmin() {
 }
 
 createAdmin()
-  .catch(error => {
+  .catch((error) => {
     console.error(error.message);
     process.exitCode = 1;
   })
   .finally(() => db.close());
+
