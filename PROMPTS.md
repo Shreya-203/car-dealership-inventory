@@ -1,44 +1,37 @@
-# AI Usage and Prompt Log
+## Original Prompts and Conversation Records
 
-## Purpose
+The following prompts summarize the actual development tasks for which AI assistance was used during the development of AutoHub. They are summaries, not verbatim copies of every conversation.
 
-This file documents the AI assistance used during development of the AutoHub Car Dealership Inventory System.
+### 1. Backend and API
 
-## Development Areas
+* Help implement a Node.js and Express REST API for a car dealership inventory system.
+* Help structure the backend routes, services, database access, and error handling.
+* Help implement registration, login, password hashing, JWT authentication, and role-based authorization.
 
-### 1. Backend API
+### 2. Database and Inventory
 
-* Assistance with Express route structure and API implementation.
-* Assistance with SQLite database operations.
-* Assistance with JWT authentication and role-based access control.
+* Help implement SQLite tables for users and vehicles.
+* Help implement vehicle creation, retrieval, updating, deletion, searching, and restocking.
+* Help ensure that purchasing a vehicle reduces its available stock.
 
-### 2. Frontend
+### 3. Frontend
 
-* Assistance with React component implementation.
-* Assistance with vehicle search and inventory management.
-* Assistance with the vehicle editing interface.
+* Help implement a React interface for login, registration, vehicle search, and inventory display.
+* Help implement administrator controls for adding, editing, deleting, and restocking vehicles.
+* Help troubleshoot frontend rendering and state-management issues.
 
-### 3. Debugging
+### 4. Testing and Debugging
 
-* Assistance diagnosing backend route errors.
-* Assistance fixing vehicle restocking.
-* Assistance troubleshooting frontend rendering problems.
-
-### 4. Testing
-
-* Assistance creating Jest and Supertest API tests.
-* Assistance interpreting test results.
+* Help write and debug automated tests for authentication and vehicle API functionality.
+* Help diagnose backend route errors and inventory restocking issues.
+* Help interpret test results and verify that the automated test suites pass.
 
 ### 5. Documentation
 
-* Assistance preparing project documentation and setup instructions.
+* Help organize the project README, installation instructions, API documentation, screenshots, and test instructions.
 
-## Original Prompts and Conversation Records
+### Conversation Records
 
-Add the actual prompts used during development and the corresponding conversation links or raw chat logs required by the assessment.
+The full original conversations and their shareable links must be added here separately, in accordance with the assessment requirements.
 
-Do not invent conversation URLs. Include only links that you can open and verify.
-
-## Developer Review
-
-All AI-assisted code and documentation must be reviewed, tested, and understood by the developer before submission.
+No public conversation URLs are listed in this document because a shareable link must first be created and verified. Do not treat these prompt summaries as raw chat logs.
