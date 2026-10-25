@@ -1,56 +1,62 @@
 # AutoHub — Car Dealership Inventory System
 
-AutoHub is a full-stack web application for managing a car dealership's vehicle inventory. Customers can register, log in, browse vehicles, search for vehicles, and purchase available stock. Administrators can add, edit, delete, and restock vehicles.
+AutoHub is a full-stack web application for managing a car dealership's vehicle inventory. Customers can register, log in, browse vehicles, search and filter inventory, and purchase available stock. Administrators can add, edit, delete, and restock vehicles.
+
+**GitHub Repository:** https://github.com/Shreya-203/car-dealership-inventory
 
 ## Features
 
-### Authentication
+### 1. Authentication and Authorization
 
 * User registration and login.
 * Password hashing with bcrypt.
 * JWT-based authentication.
 * Role-based authorization for administrator operations.
+* Separate customer and administrator experiences.
 
-### Vehicle Inventory
+### 2. Vehicle Inventory
 
 * View available vehicles.
-* Search by make, model, and category.
+* Search vehicles by make, model, and category.
 * Filter vehicles by maximum price.
-* Add new vehicles.
+* Add new vehicles as an administrator.
 * Update vehicle details.
-* Delete vehicles.
-* Purchase vehicles and decrease stock.
-* Restock vehicles with a positive quantity.
+* Delete vehicles as an administrator.
+* Purchase vehicles and decrease available stock.
+* Restock vehicles as an administrator.
 * Prevent purchases when stock is unavailable.
 
-### Security
+### 3. Security
 
 * Passwords are hashed before storage.
 * Protected API endpoints require a valid JWT.
-* Administrator-only operations are protected by role checks.
-* SQL queries use parameterized statements.
+* Administrator-only operations use role checks.
+* Database queries use parameterized statements.
 * Environment variables are used for configuration.
 
 ## Technology Stack
 
-**Frontend**
+### Frontend
 
 * React
 * Vite
+* HTML5
+* CSS3
 * Tailwind CSS
 
-**Backend**
+### Backend
 
 * Node.js
 * Express.js
-* JSON Web Tokens
-* bcrypt
+* JSON Web Tokens (JWT)
+* bcryptjs
 
-**Database**
+### Database
 
-* SQLite using better-sqlite3
+* SQLite
+* better-sqlite3
 
-**Testing**
+### Testing
 
 * Jest
 * Supertest
@@ -70,81 +76,104 @@ car-dealership-inventory/
 │   ├── tests/
 │   │   ├── auth.test.js
 │   │   └── vehicle.test.js
-│   ├── .env
-│   └── package.json
+│   ├── package.json
+│   └── .env                 # Create locally; do not commit
 ├── frontend/
 │   ├── src/
 │   ├── package.json
 │   └── vite.config.js
 ├── screenshots/
+│   ├── admin.png
+│   ├── inventory.png
+│   ├── login.png
+│   ├── search.png
+│   └── test.png
 ├── PROMPTS.md
 └── README.md
 ```
 
 ## Prerequisites
 
-Install:
+Install the following before running the project:
 
 * Node.js and npm
-* A code editor such as Visual Studio Code
+* Visual Studio Code or another code editor
+* Git
 
 ## Installation and Setup
 
 ### 1. Clone the repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/Shreya-203/car-dealership-inventory.git
 cd car-dealership-inventory
 ```
 
-Replace `YOUR_GITHUB_REPOSITORY_URL` with the actual repository URL.
-
 ### 2. Configure the backend
+
+Open a terminal in the project root and run:
 
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file inside `backend/`:
+Create a file named `.env` inside the `backend` directory.
+
+Add the following configuration, replacing the example values with your own secure credentials:
 
 ```env
 PORT=5000
-JWT_SECRET=replace_with_a_long_random_secret
-ADMIN_NAME=Administrator
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=replace_with_a_unique_password_of_at_least_12_characters
+JWT_SECRET=CarDealership_Incubyte_2026_SecureKey_9xK7mP2vL8qR
+ADMIN_NAME=shreya
+ADMIN_EMAIL=jathanshreya34@gmail.com
+ADMIN_PASSWORD=SH123@20JATHAN
 ```
 
-Use your own secure values. Never commit `.env` to GitHub.
+**Important:**
+
+* Use a strong, unique JWT secret.
+* Set a unique administrator password of at least 12 characters.
+* Keep `.env` private.
+* Never commit `.env` or database files to GitHub.
 
 ### 3. Create the administrator account
 
-From the `backend/` directory, run:
+From the `backend` directory, run:
 
 ```bash
 node src/config/createAdmin.js
 ```
 
-The script creates the administrator if the configured email does not already exist.
+The script uses the administrator details configured in the backend .env file.
+
+If the configured account does not exist, the script creates an administrator account.
+If the account already has the administrator role, the script reports that it is already an administrator.
+If the account exists with a regular user role, the script promotes it to administrator.
+
+Use the configured administrator email and password to log in.
 
 ### 4. Start the backend
+
+From the `backend` directory, run:
 
 ```bash
 npm start
 ```
 
-The API runs at:
+The API should run at:
 
-`http://localhost:5000`
+http://localhost:5000
 
 Health check:
 
-`http://localhost:5000/api/health`
+http://localhost:5000/api/health
+
+Keep this terminal open while using the application.
 
 ### 5. Start the frontend
 
-Open another terminal:
+Open a second terminal from the project root and run:
 
 ```bash
 cd frontend
@@ -152,90 +181,70 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite, usually:
+Open the local URL displayed by Vite, usually:
 
-`http://localhost:5173`
+http://localhost:5173
+
+Keep both the backend and frontend running while testing the application.
 
 ## API Endpoints
 
-All vehicle endpoints require a valid JWT in the Authorization header.
+The following table documents the intended access levels. Verify these against the actual route definitions in the source code.
 
-| Method | Endpoint                     | Access        | Purpose                  |
-| ------ | ---------------------------- | ------------- | ------------------------ |
-| POST   | `/api/auth/register`         | Public        | Register a user          |
-| POST   | `/api/auth/login`            | Public        | Log in and receive a JWT |
-| GET    | `/api/health`                | Public        | Check API status         |
-| GET    | `/api/vehicles`              | Authenticated | List vehicles            |
-| GET    | `/api/vehicles/search`       | Authenticated | Search vehicles          |
-| POST   | `/api/vehicles`              | Admin         | Add a vehicle            |
-| PUT    | `/api/vehicles/:id`          | Admin         | Update a vehicle         |
-| DELETE | `/api/vehicles/:id`          | Admin         | Delete a vehicle         |
-| POST   | `/api/vehicles/:id/purchase` | Authenticated | Purchase a vehicle       |
-| POST   | `/api/vehicles/:id/restock`  | Admin         | Restock a vehicle        |
+| Method | Endpoint                     | Access        | Purpose                    |
+| ------ | ---------------------------- | ------------- | -------------------------- |
+| POST   | `/api/auth/register`         | Public        | Register a customer        |
+| POST   | `/api/auth/login`            | Public        | Log in and receive a JWT   |
+| GET    | `/api/health`                | Public        | Check API status           |
+| GET    | `/api/vehicles`              | Authenticated | List vehicles              |
+| GET    | `/api/vehicles/search`       | Authenticated | Search and filter vehicles |
+| POST   | `/api/vehicles`              | Admin         | Add a vehicle              |
+| PUT    | `/api/vehicles/:id`          | Admin         | Update vehicle details     |
+| DELETE | `/api/vehicles/:id`          | Admin         | Delete a vehicle           |
+| POST   | `/api/vehicles/:id/purchase` | Authenticated | Purchase a vehicle         |
+| POST   | `/api/vehicles/:id/restock`  | Admin         | Restock a vehicle          |
 
 ### Example authenticated request
 
-```http
+After logging in successfully, the API returns a JWT token. Use that token when accessing protected endpoints.
+
 GET /api/vehicles
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer CarDealership_Incubyte_2026_SecureKey_9xK7mP2vL8qR
+
+Replace CarDealership_Incubyte_2026_SecureKey_9xK7mP2vL8qR with the token returned by the login endpoint. Do not publish real tokens or secret keys in the README.
 ```
+
+
 
 ## Running Tests
 
-From the `backend/` directory:
+From the backend directory, run:
 
 ```bash
 npm test
 ```
 
-For coverage:
+To generate a test coverage report, run:
 
 ```bash
 npm run test:coverage
 ```
 
-The tests cover authentication and vehicle operations. Check the actual test output before reporting the final number of passing tests.
+During development, the backend test suite completed with **14 passing tests across 2 test suites**. Run the tests again before submission and report the results of that run.
 
-## Screenshots
+### Test-Driven Development
 
-Application screenshots are stored in the `screenshots/` directory.
+The project uses Jest and Supertest for automated backend testing.
 
-Add screenshots showing:
+The expected TDD workflow is:
 
-* Login and registration pages.
-* Vehicle inventory dashboard.
-* Vehicle search results.
-* Administrator add/edit operations.
-* Restocking and purchasing.
-* Automated test results.
+1. Write a test for the intended behavior.
+2. Run the test and confirm that it fails.
+3. Implement the minimum code required to pass the test.
+4. Run the test again and confirm that it passes.
+5. Refactor while keeping the tests green.
 
-## Test-Driven Development
-
-The project uses Jest and Supertest to test the REST API.
-
-For features developed using TDD, document the actual sequence:
-
-1. Write a failing test.
-2. Implement the minimum code required to pass it.
-3. Run the test suite.
-4. Refactor while keeping tests green.
-
-The development history should accurately reflect which features followed this process.
-
-## AI Usage
-
-AI tools were used as development assistance for implementation guidance, debugging, and documentation. The final implementation and test results should be reviewed and understood by the developer.
-
-See `PROMPTS.md` for the prompts and AI interaction records required for this assessment.
-
-## Future Improvements
-
-* Pagination for large inventories.
-* Vehicle image upload.
-* Purchase history and transaction records.
-* More comprehensive automated testing.
-* Improved deployment configuration.
-
+The Git history should accurately demonstrate the Red-Green-Refactor process for features developed using TDD.
 
 ## Application Screenshots
 
@@ -257,4 +266,60 @@ See `PROMPTS.md` for the prompts and AI interaction records required for this as
 
 ### Backend Test Results
 
-![Backend Tests](screenshots/tests.png)
+![Backend Test Results](screenshots/test.png)
+
+## My AI Usage
+
+### AI Tools Used
+
+**ChatGPT** was used as an AI development assistant during the development of AutoHub.
+
+
+### How I Used AI
+
+**Backend API Development**
+
+* Received guidance on organizing the Express application into routes, services, middleware, and database configuration.
+* Used assistance to understand registration, login, password hashing, JWT authentication, and role-based authorization.
+* Investigated API errors and vehicle inventory behavior.
+
+**Database Management**
+
+* Received assistance with SQLite database operations and vehicle inventory management.
+* Investigated administrator-role issues and database records.
+
+**Frontend Development**
+
+* Received assistance implementing and troubleshooting React components for authentication, vehicle listings, searching, filtering, and inventory management.
+* Worked through administrator controls for adding, editing, deleting, and restocking vehicles.
+
+**Testing and Debugging**
+
+* Used AI assistance to develop and troubleshoot automated tests.
+* Examined test output and manually checked application behavior.
+
+**Documentation**
+
+* Used AI assistance to organize setup instructions, API documentation, project screenshots, and testing information.
+
+### Reflection on AI Usage
+
+AI assistance helped me investigate errors, understand unfamiliar implementation details, and explore possible solutions more efficiently.
+
+Debugging administrator authentication helped me understand how database roles, JWT claims, backend authorization, and frontend session state interact.
+
+AI-generated suggestions required review and testing rather than blind acceptance. I remain responsible for understanding the code, verifying functionality, and ensuring that the final implementation meets the project requirements.
+
+## AI Conversation Records
+
+The root-level `PROMPTS.md` contains the AI interaction records required for this assessment.
+
+
+
+## Future Improvements
+
+* Pagination for large inventories.
+* Vehicle image upload.
+* Purchase history and transaction records.
+* More comprehensive automated testing.
+* Improved deployment configuration.
